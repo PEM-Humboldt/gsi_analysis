@@ -1,17 +1,17 @@
 # Gap-selection-Index--GSI
 
-The Gap Index (GSI) allows identifying the areas in the country with missing information and therefore the sites in which additional sampling will improve knowledge on biodiversity. This approach is carried out following what was proposed by [García Márquez et al., 2012](http://www.biodiversity-plants.de/biodivers_ecol/article_meta.php?DOI=10.7809/b-e.00057) to identify the spatial coverage of biological information in databases, the environmental representativeness of these records, as well as the complementarity of the species in the records. The GSI is quantified using values ​​that range between 0 and 1, with 0 being a well-represented sector, and 0 being the underrepresented areas or areas with greater information gaps.
+The Gap Index (GSI) allows identifying the areas in the country with missing information and therefore the sites in which additional sampling will improve knowledge on biodiversity. This analysis follows the proposal by [García Márquez et al., 2012](http://www.biodiversity-plants.de/biodivers_ecol/article_meta.php?DOI=10.7809/b-e.00057) to identify the spatial coverage of biological information in databases, the environmental representativeness of these records, as well as the complementarity of the species in the records. The GSI is quantified using values ​​that range between 0 and 1, with 0 being a well-represented sector, and 0 being the underrepresented areas or areas with higher values of information gaps.
 
 ## Prerequisites
 
-The index is calculated using the records of species present both in data portals and the information that the Humboldt Institute has compiled in recent years. To calculate it, three dimensions must be estimated: i) a quantification of the biological records per square kilometer, ii) the environmental representativeness of each occurrence following the methodology proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) and iii) The identification of the complementarity of the species that have records per square kilometer based on first-order Jackknife nonparametric estimates. 
+The index is calculated using the records of species present both in data portals ([SiB Colombia](https://sibcolombia.net/), [SpeciesLink](http://splink.cria.org.br/), [eBird](https://ebird.org/home)) and the information that the Humboldt Institute has compiled in recent years ([Ceiba](http://i2d.humboldt.org.co/ceiba/)). The GSI represents three dimensions as follows:: i) a quantification of the biological records per square kilometer, ii) the environmental representativeness of each occurrence following the methodology proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) and iii) estimated complementary of species richness based on the first-order Jackknife non-parametric estimator.. 
 
-For this reason you need the scripts **1_Record_dimension**, **2_Ambiental_dimension** and **3_Complementarity dimesion** to obtain the three elemenatry elements and the **4_GSI** script to obtain the GSI raster. Also it's necessary the **GAPfunctions** file, because it contains some of the functions used in the analysis.
+For this reason you need the scripts **1_Record_dimension**, **2_Ambiental_dimension** and **3_Complementarity dimesion** obtain the three GSI´s components and then, you must run the**4_GSI** script to obtain the GSI raster. Also it's necessary the **GAPfunctions** file, because it contains some of the functions used in the analysis.
 
 
 ### Base Data
 
-Data frame with records of the species and geographical coordinates. The structure of the file requies the following names in the columns: _ID_, _species_, _lat_ and _lon_.
+Dataframe with records of the species and geographical coordinates. The structure of the file requies the following names in the columns: _ID_, _species_, _lat_ and _lon_.
 
 ### Dependencies
 
@@ -54,7 +54,7 @@ To obtain the results you requires.
 
 We suggest running the routines step by step, following the order of each script. Nevertheless, you can obtain the result for each dimenson independently. 
 
-It is important that the base data will be used throughout the process, and that this data is stored in the root of the folder.
+The database must be stored in a root folder to be read throughout the process.
 
  ## Authors and contact
  
