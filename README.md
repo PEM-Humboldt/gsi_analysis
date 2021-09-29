@@ -15,7 +15,7 @@ Data frame with records of the species and geographical coordinates. The structu
 
 ### Dependencies
 
-To obtain the results you requires 
+To obtain the results you requires. 
 
 * [R](https://cran.r-project.org/mirrors.html)
 * [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
@@ -67,9 +67,7 @@ It is important that the base data will be used throughout the process, and that
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/PEM-Humboldt/indicadores-sinap/blob/master/LICENSE.md) file for details
-
-
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/crcruzr/Gap-selection-Index--GSI/blob/main/LICENSE) file for details.
 
 ## Final considerations
 
