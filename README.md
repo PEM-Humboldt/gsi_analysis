@@ -81,4 +81,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 
 ## Final considerations
 
-This product contributes to the Annual Operational Plan to the [Instituto Hubmoldt](http://www.humboldt.org.co/es/) for the year 2021. Specifically to the activity associated with generating a repository with the codes used for the standardization of processes for raising baselines and monitoring biodiversity.
+This product contributes to the Annual Operational Plan to the [Instituto Humboldt](http://www.humboldt.org.co/es/) for the year 2021. Specifically to the activity associated with generating a repository with the codes used for the standardization of processes for raising baselines and monitoring biodiversity.
