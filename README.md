@@ -60,10 +60,9 @@ It is important that the base data will be used throughout the process, and that
  
 * **[Cristian Alexander Cruz-Rodríguez](https://github.com/crcruzr)** - *Investigador Asistente I.Humboldt* -  [Contact](ccruz@humboldt.org.co)
 * **[Elkin Alexi Noguera Urbano](https://github.com/elkalexno)** - *Investiador Adjunto I.Humboldt* - [Contact](enoguera@humboldt.org.co)
-* **Maria Cecilia Londoño** - *Investiadora Titular I.Humboldt* 
 * **Iván gonzález**
 * **Laura Carolina Bello**
- 
+* **Maria Cecilia Londoño** - *Investiadora Titular I.Humboldt*  
 
 ## License
 
