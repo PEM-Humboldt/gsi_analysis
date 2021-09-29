@@ -1,4 +1,4 @@
-# Gap-selection-Index--GSI
+# Gap Selection Index (GSI)
 
 The Gap Index (GSI) allows identifying the areas in the country with missing information and therefore the sites in which additional sampling will improve knowledge on biodiversity. This analysis follows the proposal by [García Márquez et al., 2012](http://www.biodiversity-plants.de/biodivers_ecol/article_meta.php?DOI=10.7809/b-e.00057) to identify the spatial coverage of biological information in databases, the environmental representativeness of these records, as well as the complementarity of the species in the records. The GSI is quantified using values ​​that range between 0 and 1, with 0 being a well-represented sector, and 0 being the underrepresented areas or areas with higher values of information gaps.
 
