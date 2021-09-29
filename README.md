@@ -4,7 +4,7 @@ The Gap Index (GSI) allows identifying the areas in the country with missing inf
 
 ## Prerequisites
 
-To obtain it, the index is calculated using the records of species present both in data portals and the information that the Humboldt Institute has compiled in recent years. To calculate it, three dimensions must be estimated: i) a quantification of the biological records per square kilometer, ii) the environmental representativeness of each occurrence following the methodology proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) and iii) The identification of the complementarity of the species that have records per square kilometer based on first-order Jackknife nonparametric estimates. 
+The index is calculated using the records of species present both in data portals and the information that the Humboldt Institute has compiled in recent years. To calculate it, three dimensions must be estimated: i) a quantification of the biological records per square kilometer, ii) the environmental representativeness of each occurrence following the methodology proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) and iii) The identification of the complementarity of the species that have records per square kilometer based on first-order Jackknife nonparametric estimates. 
 
 For this reason you need the scripts **1_Record_dimension**, **2_Ambiental_dimension** and **3_Complementarity dimesion** to obtain the three elemenatry elements and the **4_GSI** script to obtain the GSI raster. Also it's necessary the **GAPfunctions** file, because it contains some of the functions used in the analysis.
 
@@ -52,14 +52,14 @@ To obtain the results you requires.
 
 ## How to run
 
-We suggest that run the rutines following the numbers in the scrips. Nevertheless, you can obtain the result for each dimenson independently. 
+We suggest running the routines step by step, following the order of each script. Nevertheless, you can obtain the result for each dimenson independently. 
 
 It is important that the base data will be used throughout the process, and that this data is stored in the root of the folder.
 
  ## Authors and contact
  
 * **[Cristian Alexander Cruz-Rodríguez](https://github.com/crcruzr)** - *Investigador Asistente I.Humboldt* -  [Contact](ccruz@humboldt.org.co)
-* **[Elkin Alexi Noguera Urbano](https://github.com/elkalexno)** - *Investiador Adjunto I.Humboldt* - [Contact](enoguera@humboldt.org.co)
+* **[Elkin Alexi Noguera Urbano](https://github.com/elkalexno)** - *Investigador Adjunto I.Humboldt* - [Contact](enoguera@humboldt.org.co)
 * **Iván gonzález**
 * **Laura Carolina Bello**
 * **Maria Cecilia Londoño** - *Investiadora Titular I.Humboldt*  
