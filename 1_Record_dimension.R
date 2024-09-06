@@ -9,6 +9,7 @@ library(vroom)
 # ---------------------------
 #   Data loading
 # ---------------------------
+# change
 
 # Definición del directorio de trabajo
 wd <- '/Users/elkintenorio/Library/CloudStorage/GoogleDrive-etenorio@humboldt.org.co/Mi\ unidad/Proyectos/Mapa_de_Vacios/Gap_Selection\ Index_GSI'
