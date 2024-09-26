@@ -34,13 +34,13 @@ Data <- vroom("/Users/elkintenorio/Library/CloudStorage/GoogleDrive-etenorio@hum
 Data2 <- Data[, c('gbifID', 'decimalLatitude_x', 'decimalLongitude_x')] #Select ad first column the name of the id record. And for second and third column, latitude and longitude, respectively.
 Data2 <- Data2[!is.na(Data2$decimalLatitude_x),] # Eliminar registros con latitud NA
 Data2 <- Data2[!is.na(Data2$decimalLongitude_x),] # Eliminar registros con longitud NA
+
+# Eliminar duplicados basados en coordenadas
+Data2 <- Data2[!duplicated(Data2[c("decimalLongitude_x", "decimalLatitude_x")]), ]
 # No estoy seguro que lo que aquí se hace sea correcto. Se está eliminando los duplicados por coordenada
 # Esto implica que se deja un punto por lcalidad, removiendo todas las especies, y dejando solo una
 # Esto puede ser correcto para el segundo código (dimensión ambiental), pero para este (dimensión de registros), no estoy seguro.  
 
-
-# Eliminar duplicados basados en coordenadas
-Data2 <- Data2[!duplicated(Data2[c("decimalLongitude_x", "decimalLatitude_x")]), ]
 
 # Convertir a objeto sf y transformar las coordenadas al sistema proyectado
 coords <- st_as_sf(Data2, coords = c("decimalLongitude_x", "decimalLatitude_x"), crs = GRS.geo)
