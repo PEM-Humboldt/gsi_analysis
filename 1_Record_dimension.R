@@ -11,13 +11,13 @@ library(vroom)
 # ---------------------------
 
 # Definición del directorio de trabajo
-wd <- '/Users/elkintenorio/Library/CloudStorage/GoogleDrive-etenorio@humboldt.org.co/Mi\ unidad/Proyectos/Mapa_de_Vacios/Gap_Selection\ Index_GSI'
+wd <- '/GSI'
 setwd(wd)  # Establecer el directorio de trabajo
 dir.create("1_Records/")  # Crear un directorio para guardar resultados
 
 # Cargar shapefile del área de estudio
 ##col <- geodata::gadm(country= "COL", level=0, path= ".") # función desactivada. Sirve para cargar shapefile de Colombia desde servidor remoto del paquete geodata
-col <- read_sf('/Users/elkintenorio/Library/CloudStorage/GoogleDrive-etenorio@humboldt.org.co/Mi\ unidad/Proyectos/Mapa_de_Vacios/FPV_2024/AMAZONAS', 'AMAZONAS')
+col <- read_sf('/Carpeta_shapefile', 'shapefile')
 
 # Definición del sistema de referencia geográfico (GCS) y proyectado (CRS)
 GRS.geo<-"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" # Geographic Reference to AOI
@@ -30,17 +30,15 @@ proj.col <- sf::st_transform(col, crs = CRS.proj)
 shape_zoneOwin <- as.owin(proj.col)
 
 # Cargar registros de especies desde un archivo txt
-Data <- vroom("/Users/elkintenorio/Library/CloudStorage/GoogleDrive-etenorio@humboldt.org.co/Mi\ unidad/Proyectos/Mapa_de_Vacios/FPV_2024/Registros_Agosto_2024/dwc_AMAZONAS.txt", col_names = TRUE)
+Data <- vroom("Archivo_registros.txt", col_names = TRUE)
 Data2 <- Data[, c('gbifID', 'decimalLatitude_x', 'decimalLongitude_x')] #Select ad first column the name of the id record. And for second and third column, latitude and longitude, respectively.
 Data2 <- Data2[!is.na(Data2$decimalLatitude_x),] # Eliminar registros con latitud NA
 Data2 <- Data2[!is.na(Data2$decimalLongitude_x),] # Eliminar registros con longitud NA
 
 # Eliminar duplicados basados en coordenadas
 Data2 <- Data2[!duplicated(Data2[c("decimalLongitude_x", "decimalLatitude_x")]), ]
-# No estoy seguro que lo que aquí se hace sea correcto. Se está eliminando los duplicados por coordenada
-# Esto implica que se deja un punto por lcalidad, removiendo todas las especies, y dejando solo una
-# Esto puede ser correcto para el segundo código (dimensión ambiental), pero para este (dimensión de registros), no estoy seguro.  
-
+# De acuerdo con García Márquez et al. (2012), esta dimensión se basa en la lista de localidades de colecta como puntos
+# con los cuales se genera la "densidad de localidades" ("density of collection localities").
 
 # Convertir a objeto sf y transformar las coordenadas al sistema proyectado
 coords <- st_as_sf(Data2, coords = c("decimalLongitude_x", "decimalLatitude_x"), crs = GRS.geo)
@@ -51,7 +49,7 @@ system.time(over.coords <- st_intersects(coordinates.col, proj.col, sparse = FAL
 Data2 <- Data2[over.coords == TRUE,]
 #system.time(over.coords <- st_intersection(coordinates.col, proj.col, sparse = FALSE)); head(over.coords) #Identify coordinates within the AOI
 #coordinates.col <- over.coords #Este paso asume que el st_intersect solo genera en su output coordenadas que efextivamente haver overlap (no genera NAs).
-# El comando con st_intersection genera el objetvo espacial de los overlap, pero es más demorado.
+# El comando con st_intersection genera el objetvo espacial de los overlap, pero toma más tiempo.
 #system.time(over.coords <- st_within(coordinates.col, proj.col)) #otra alternativa, mirar cuál es más rápida
 
 
