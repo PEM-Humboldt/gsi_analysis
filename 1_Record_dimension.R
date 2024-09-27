@@ -31,21 +31,21 @@ shape_zoneOwin <- as.owin(proj.col)
 
 # Cargar registros de especies desde un archivo txt
 Data <- vroom("Archivo_registros.txt", col_names = TRUE)
-Data2 <- Data[, c('gbifID', 'decimalLatitude_x', 'decimalLongitude_x')] #Select ad first column the name of the id record. And for second and third column, latitude and longitude, respectively.
-Data2 <- Data2[!is.na(Data2$decimalLatitude_x),] # Eliminar registros con latitud NA
-Data2 <- Data2[!is.na(Data2$decimalLongitude_x),] # Eliminar registros con longitud NA
+Data2 <- Data[, c('gbifID', 'decimalLatitude', 'decimalLongitude_x')] #Select ad first column the name of the id record. And for second and third column, latitude and longitude, respectively.
+Data2 <- Data2[!is.na(Data2$decimalLatitude),] # Eliminar registros con latitud NA
+Data2 <- Data2[!is.na(Data2$decimalLongitude),] # Eliminar registros con longitud NA
 
 # Eliminar duplicados basados en coordenadas
-Data2 <- Data2[!duplicated(Data2[c("decimalLongitude_x", "decimalLatitude_x")]), ]
+Data2 <- Data2[!duplicated(Data2[c("decimalLongitude", "decimalLatitude")]), ]
 # De acuerdo con García Márquez et al. (2012), esta dimensión se basa en la lista de localidades de colecta como puntos
 # con los cuales se genera la "densidad de localidades" ("density of collection localities").
 
 # Convertir a objeto sf y transformar las coordenadas al sistema proyectado
-coords <- st_as_sf(Data2, coords = c("decimalLongitude_x", "decimalLatitude_x"), crs = GRS.geo)
+coords <- st_as_sf(Data2, coords = c("decimalLongitude", "decimalLatitude"), crs = GRS.geo)
 coordinates.col <- st_transform(coords, crs = CRS.proj)
 
 # Intersección espacial para verificar si las coordenadas están dentro del AOI (Area of Interest)
-system.time(over.coords <- st_intersects(coordinates.col, proj.col, sparse = FALSE)); head(over.coords) #531387 records, 8 min
+system.time(over.coords <- st_intersects(coordinates.col, proj.col, sparse = FALSE)); head(over.coords)
 Data2 <- Data2[over.coords == TRUE,]
 #system.time(over.coords <- st_intersection(coordinates.col, proj.col, sparse = FALSE)); head(over.coords) #Identify coordinates within the AOI
 #coordinates.col <- over.coords #Este paso asume que el st_intersect solo genera en su output coordenadas que efextivamente haver overlap (no genera NAs).
