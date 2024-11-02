@@ -1,61 +1,90 @@
 
 library(sf)
-library(maptools)
+library(terra)
 library(spatstat)
-library(raster)
+library(geodata)
+library(dplyr)
+library(vroom)
 
 # ---------------------------
 #   Data loading
 # ---------------------------
-wd <- 'F:/GSI/'
-setwd(wd)
-dir.create("1_Records/")
 
-col<-getData(name = 'GADM', country = 'COL', level = 0) #Areo of interes (AOI)
-col@data$OBJECTID<-1
+# Definición del directorio de trabajo
+wd <- '/GSI'
+setwd(wd)  # Establecer el directorio de trabajo
+dir.create("1_Records/")  # Crear un directorio para guardar resultados
+
+# Cargar shapefile del área de estudio
+##col <- geodata::gadm(country= "COL", level=0, path= ".") # función desactivada. Sirve para cargar shapefile de Colombia desde servidor remoto del paquete geodata
+col <- read_sf('/Carpeta_shapefile', 'shapefile')
+
+# Definición del sistema de referencia geográfico (GCS) y proyectado (CRS)
 GRS.geo<-"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" # Geographic Reference to AOI
 CRS.proj<-'+proj=tmerc +lat_0=4.596200416666666 +lon_0=-74.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs' # Planar Reference to AOI
-proj.col<- spTransform(col, CRS.proj)
-shape_zoneOwin<-as.owin(proj.col)
 
-load('data_to_gap.RData') # Records to use in the analysis / require name of the species, coordinates (geograhpic type) and ID identifier
-Data <- data_to_gap
-Data2 <- Data[, c('ID', 'lat', 'lon')]
-Data2 <- Data2[!is.na(Data2$lat),]
-Data2 <- Data2[!is.na(Data2$lon),]
-coordinates(Data2)=~)on+lat
+# Transformación del shapefile al sistema de coordenadas proyectadas
+proj.col <- sf::st_transform(col, crs = CRS.proj) 
 
-coords<-as.data.frame(unique(Data2@coords))
-coords$ID<-1:nrow(coords)
-coordinates(coords)=~lon+lat
-coords@proj4string@projargs<-GRS.geo
-coordinates.col<- spTransform(coords, CRS.proj)
-system.time(over.coords <- over(coordinates.col, proj.col)); head(over.coords) #Identify coordinates within the AOI
+# Convertir el shapefile a una ventana espacial compatible con spatstat
+shape_zoneOwin <- as.owin(proj.col)
 
-enAOI <- as.numeric(over.coords$OBJECTID)
-enAOI[enAOI>=1] <- 1
-enAOI[is.na(enAOI)] <- 0
-coordinates.col<-as.data.frame(coordinates.col)
-coordinates.col$enAOI <- enAOI
-coordinates.col<- coordinates.col[coordinates.col$enAOI == 1,]
+# Cargar registros de especies desde un archivo txt
+Data <- vroom("Archivo_registros.txt", col_names = TRUE)
+Data2 <- Data[, c('gbifID', 'decimalLatitude', 'decimalLongitude_x')] #Select ad first column the name of the id record. And for second and third column, latitude and longitude, respectively.
+Data2 <- Data2[!is.na(Data2$decimalLatitude),] # Eliminar registros con latitud NA
+Data2 <- Data2[!is.na(Data2$decimalLongitude),] # Eliminar registros con longitud NA
+
+# Eliminar duplicados basados en coordenadas
+Data2 <- Data2[!duplicated(Data2[c("decimalLongitude", "decimalLatitude")]), ]
+# De acuerdo con García Márquez et al. (2012), esta dimensión se basa en la lista de localidades de colecta como puntos
+# con los cuales se genera la "densidad de localidades" ("density of collection localities").
+
+# Convertir a objeto sf y transformar las coordenadas al sistema proyectado
+coords <- st_as_sf(Data2, coords = c("decimalLongitude", "decimalLatitude"), crs = GRS.geo)
+coordinates.col <- st_transform(coords, crs = CRS.proj)
+
+# Intersección espacial para verificar si las coordenadas están dentro del AOI (Area of Interest)
+system.time(over.coords <- st_intersects(coordinates.col, proj.col, sparse = FALSE)); head(over.coords)
+Data2 <- Data2[over.coords == TRUE,]
+#system.time(over.coords <- st_intersection(coordinates.col, proj.col, sparse = FALSE)); head(over.coords) #Identify coordinates within the AOI
+#coordinates.col <- over.coords #Este paso asume que el st_intersect solo genera en su output coordenadas que efextivamente haver overlap (no genera NAs).
+# El comando con st_intersection genera el objetvo espacial de los overlap, pero toma más tiempo.
+#system.time(over.coords <- st_within(coordinates.col, proj.col)) #otra alternativa, mirar cuál es más rápida
 
 
-#shape_zoneOwin <- as.owin(col)
-p <- ppp(coordinates.col$lon, coordinates.col$lat, window=shape_zoneOwin, unitname=c("metre","metres")) # Create a Point Pattern using unit to GRS
+# Crear un patrón de puntos con la ventana espacial definida
+coords_df <- st_coordinates(coordinates.col)
+p <- ppp(coords_df[, "X"], coords_df[, "Y"], window = shape_zoneOwin, unitname = c("metre", "metres"))
 summary(p)
 plot(p)
 
-diggle <- bw.diggle(p) # Selected value 
+# Estimación de la densidad del kernel
+diggle <- bw.diggle(p)  # Selección del valor de suavizamiento
 plot(diggle)
 plot(diggle, xlim= c(0,100), main="Smoothing bandwidth for the kernel estimation")
 
-system.time(diggle_den <- density.ppp(p, diggle, eps=1000)) # Kernel Smoothed Intensity of Point Pattern 1km - 17 min
+# Calcular la intensidad suavizada del patrón de puntos (1km de resolución)
+system.time(diggle_den <- density.ppp(p, diggle, eps=10000)) # Kernel Smoothed Intensity of Point Pattern 1km - 17 min
+
+# Graficar la densidad suavizada
 plot(diggle_den,diggle, main='Gap density diggle 1km')
 
-densi_dig1km<-raster(diggle_den)
-rescal_dig1km<-densi_dig1km/max(diggle_den) # Re-scaling the value using teh Max value. Please, change the value based on your results.
+# Convertir la densidad a un objeto raster
+densi_dig1km <- rast(diggle_den)
+rescal_dig1km <- densi_dig1km/max(diggle_den)  # Reescalar usando el valor máximo
 
-crs(rescal_dig1km)<-CRS.proj
-rescal_dig1km_wgs84<- projectRaster(rescal_dig1km, crs = GRS.geo)
+# Asignar el sistema de referencia proyectado al raster
+crs(rescal_dig1km) <- CRS.proj
+
+# Proyectar el raster reescalado al sistema de referencia geográfico (WGS84)
+rescal_dig1km_wgs84 <- terra::project(rescal_dig1km, crs(GRS.geo))
+
+# Graficar el raster proyectado
 plot(rescal_dig1km_wgs84)
-writeRaster(rescal_dig1km_wgs84, filename="1_Records/Vac_dens_rescal_1km.tif", format="GTiff", overwrite=TRUE)
+
+# Guardar el raster resultante
+writeRaster(rescal_dig1km_wgs84, filename="1_Records/Vac_dens_rescal_1km.tif", overwrite=TRUE)
+
+# Guardar el entorno de trabajo en un archivo RData
+save.image(paste0('1_Records/Records_R_object.RData'))
