@@ -27,7 +27,7 @@ colrast <- terra::rasterize(col, colrast, fun="sum") # Rasterizar el shapefile
 
 # Carga de registros
 Data <- vroom(" ", col_names = TRUE)
-Data <- Data[, c('gbifID', 'decimalLatitude', 'decimalLongitude', 'species')] # Seleccionar las comlumnas donde la 1ra sea el id del registro, 2da t 3ra sea la latitud y longitud y la 4ta el nombre de las especie.
+Data <- Data[, c('gbifID', 'decimalLatitude', 'decimalLongitude', 'species')] # Seleccionar las comlumnas donde la 1ra sea el id del registro, 2da y 3ra sea la latitud y longitud y la 4ta el nombre de las especies.
 Data <- Data[!is.na(Data$decimalLongitude_x),] # Eliminar registros con longitud faltante
 Data <- Data[!is.na(Data$decimalLatitude_x),]  # Eliminar registros con latitud faltante
 Data2 = Data %>% distinct(decimalLatitude_x, decimalLongitude_x, .keep_all = TRUE) # Eliminar duplicados por coordenadas
@@ -50,8 +50,8 @@ rm(celdas) # Eliminar objeto 'celdas' para liberar memoria
 # ---------------------------
 
 # Crear una tabla de frecuencia para las celdas
-spListByCell <- Data[!is.na(Data$celdas), c('species_x', 'celdas')]
-spListByCell <- na.omit(spListByCell) # Eliminar NA
+spListByCell <- Data[!is.na(Data$celdas), c('species', 'celdas')]
+spListByCell <- na.omit(spListByCell) # Eliminar NAs
 freqTable <- table(spListByCell$celdas) # Contar frecuencia de especies por celda
 
 # Definir umbral de frecuencia
@@ -65,7 +65,7 @@ estimateS <- richEst(sppList = spListByCell$species, indexID = spListByCell$celd
 
 rm(spListByCell)
 
-# Inicializar rasters para las estimaciones
+# Crear rasters para las estimaciones
 compRichBoot <- compRichJack <- richJackHQ <- richBootHQ <- richJack <- richBoot <- en_area * 0
 richBoot[as.numeric(rownames(estimateS))] <- estimateS$Boot # Asignar valores de bootstrap
 richJack[as.numeric(rownames(estimateS))] <- estimateS$JNhat # Asignar valores de jackknife
