@@ -120,8 +120,7 @@ mas_rast <- resample(mas_rast, colrast, method = 'near')  # Resmuestrea la másc
 mas_rast <- mask(colrast, mas_rast, inverse = TRUE)  # Aplica la máscara inversa
 
 ## Generación de puntos aleatorios en el AOI. Estos puntos se usan para el cálculo estadístico de significancia del índice de sesgo.
-random_p<-randomPoints(mas_rast, n= length(dat_sp1)) #Según García Márquez et al. (2012), se deben generar el mismo número de puntos aleatorios al número de localidades de colecta.
-random_p<-raptr::randomPoints(mas_rast, nrow(dat_sp1))
+random_p<-raptr::randomPoints(mas_rast, nrow(dat_sp1)) #Según García Márquez et al. (2012), se deben generar el mismo número de puntos aleatorios al número de localidades de colecta.
 
 random <- as.data.frame(random_p)
 random_p <- random %>% st_as_sf(coords = c('x', 'y'), crs = GRS.geo)
