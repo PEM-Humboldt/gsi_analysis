@@ -59,7 +59,7 @@ The database must be stored in a root folder to be read throughout the process.
  ## Authors and contact
  
 * **[Cristian Alexander Cruz-Rodríguez](https://github.com/crcruzr)** - *Investigador Asistente I.Humboldt* -  [Contact](ccruz@humboldt.org.co)
-* **[Elkin Alexi Noguera Urbano](https://github.com/elkalexno)** - *Investigador Adjunto I.Humboldt* - [Contact](enoguera@humboldt.org.co)
+* **[Elkin Alexi Noguera Urbano](https://github.com/elkalexno)** - *Investigador Titular I I.Humboldt* - [Contact](enoguera@humboldt.org.co)
 * **Iván gonzález**
 * **Laura Carolina Bello**
 * **Maria Cecilia Londoño** - *Investiadora Titular I.Humboldt*  
