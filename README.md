@@ -6,7 +6,7 @@ The Gap Index (GSI) identifies the areas in the country with missing information
 
 The index is calculated using the records of species present both in data portals ([SiB Colombia](https://sibcolombia.net/), [SpeciesLink](http://splink.cria.org.br/), [eBird](https://ebird.org/home)) and the information that the Humboldt Institute has compiled in recent years ([Ceiba](http://i2d.humboldt.org.co/ceiba/)). The GSI represents three dimensions as follows: i) quantification of the biological records per square kilometer, ii) the environmental representativeness of each occurrence following the methodology proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) and iii) estimated complementary of species richness based on the first-order Jackknife non-parametric estimator. 
 
-For this reason, you need the scripts **1_Record_dimension**, **2_Ambiental_dimension** and **3_Complementarity dimension** to obtain the three GSI´s components, and then, you must run the the**4_GSI** script to obtain the GSI raster. Also, the **GAPfunctions** file is necessary because it contains some of the functions used in the analysis.
+For this reason, you need the scripts **1_Record_dimension**, **2_Ambiental_dimension** and **3_Complementarity dimension** to obtain the three GSI´s components, and then, you must run the **4_GSI** script to obtain the GSI raster. Also, the **GAPfunctions** file is necessary because it contains some of the functions used in the analysis.
 
 
 ### Base Data
