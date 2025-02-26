@@ -1,21 +1,21 @@
 # Gap Selection Index (GSI)
 
-The Gap Index (GSI) allows identifying the areas in the country with missing information and therefore the sites in which additional sampling will improve knowledge on biodiversity. This analysis follows the proposal by [García Márquez et al., 2012](http://www.biodiversity-plants.de/biodivers_ecol/article_meta.php?DOI=10.7809/b-e.00057) to identify the spatial coverage of biological information in databases, the environmental representativeness of these records, as well as the complementarity of the species in the records. The GSI is quantified using values ​​that range between 0 and 1, with 0 being a well-represented sector, and 0 being the underrepresented areas or areas with higher values of information gaps.
+The Gap Index (GSI) identifies the areas in the country with missing information (species records) and, therefore, the sites where additional sampling will improve biodiversity knowledge. This analysis follows the proposal by [García Márquez et al., 2012](http://www.biodiversity-plants.de/biodivers_ecol/article_meta.php?DOI=10.7809/b-e.00057) and modifications for the environmental dimension by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) to identify the spatial coverage of biological information in databases based on density analysis, the climatic representativeness of these records, as well as the taxonomical complementarity of the species in the records. The GSI is quantified using values ​​that range between 0 and 1, with 0 being a well-represented sector and 0 being the underrepresented areas or areas with higher values of information gaps.
 
 ## Prerequisites
 
-The index is calculated using the records of species present both in data portals ([SiB Colombia](https://sibcolombia.net/), [SpeciesLink](http://splink.cria.org.br/), [eBird](https://ebird.org/home)) and the information that the Humboldt Institute has compiled in recent years ([Ceiba](http://i2d.humboldt.org.co/ceiba/)). The GSI represents three dimensions as follows:: i) a quantification of the biological records per square kilometer, ii) the environmental representativeness of each occurrence following the methodology proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) and iii) estimated complementary of species richness based on the first-order Jackknife non-parametric estimator.. 
+The index is calculated using the records of species present both in data portals ([SiB Colombia](https://sibcolombia.net/), [SpeciesLink](http://splink.cria.org.br/), [eBird](https://ebird.org/home)) and the information that the Humboldt Institute has compiled in recent years ([Ceiba](http://i2d.humboldt.org.co/ceiba/)). The GSI represents three dimensions as follows: i) quantification of the biological records per square kilometer, ii) the environmental representativeness of each occurrence following the methodology proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137) and iii) estimated complementary of species richness based on the first-order Jackknife non-parametric estimator. 
 
-For this reason you need the scripts **1_Record_dimension**, **2_Ambiental_dimension** and **3_Complementarity dimesion** obtain the three GSI´s components and then, you must run the**4_GSI** script to obtain the GSI raster. Also it's necessary the **GAPfunctions** file, because it contains some of the functions used in the analysis.
+For this reason, you need the scripts **1_Record_dimension**, **2_Ambiental_dimension** and **3_Complementarity dimension** to obtain the three GSI´s components, and then, you must run the the**4_GSI** script to obtain the GSI raster. Also, the **GAPfunctions** file is necessary because it contains some of the functions used in the analysis.
 
 
 ### Base Data
 
-Dataframe with records of the species and geographical coordinates. The structure of the file requies the following names in the columns: _ID_, _species_, _lat_ and _lon_.
+A dataframe with records of the species and geographical coordinates. The file structure requires the following names in the columns: _ID_, _species_, _lat_, and _lon_.
 
 ### Dependencies
 
-To obtain the results you requires. 
+To obtain the results you require. 
 
 * [R](https://cran.r-project.org/mirrors.html)
 * [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
@@ -52,7 +52,7 @@ To obtain the results you requires.
 
 ## How to run
 
-We suggest running the routines step by step, following the order of each script. Nevertheless, you can obtain the result for each dimenson independently. 
+We suggest running the routines step by step, following the order of each script. Nevertheless, you can obtain the result for each dimension independently. 
 
 The database must be stored in a root folder to be read throughout the process.
 
@@ -60,14 +60,15 @@ The database must be stored in a root folder to be read throughout the process.
  
 * **[Cristian Alexander Cruz-Rodríguez](https://github.com/crcruzr)** - *Investigador Asistente I.Humboldt* -  [Contact](ccruz@humboldt.org.co)
 * **[Elkin Alexi Noguera Urbano](https://github.com/elkalexno)** - *Investigador Titular I I.Humboldt* - [Contact](enoguera@humboldt.org.co)
+* **[Elkin Alexander Tenorio](https://github.com/Elkin01)** - *Investigador Adjunto I.Humboldt* - [Contact](etenorio@humboldt.org.co)
 * **Iván gonzález**
 * **Laura Carolina Bello**
-* **Maria Cecilia Londoño** - *Investiadora Titular I.Humboldt*  
+* **Maria Cecilia Londoño** - *Gerente, Gerencia de Información Científica I.Humboldt*  
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/crcruzr/Gap-selection-Index--GSI/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. For details, see the [LICENSE](https://github.com/crcruzr/Gap-selection-Index--GSI/blob/main/LICENSE) file.
 
 ## Final considerations
 
-This product contributes to the Annual Operational Plan to the [Instituto Humboldt](http://www.humboldt.org.co/es/) for the year 2021. Specifically to the activity associated with generating a repository with the codes used for the standardization of processes for raising baselines and monitoring biodiversity.
+This product contributes to the Annual Operational Plan to the [Instituto Humboldt](http://www.humboldt.org.co/es/) for the year 2021, specifically to the activity associated with generating a repository with the codes used to standardize processes for raising baselines and monitoring biodiversity.
