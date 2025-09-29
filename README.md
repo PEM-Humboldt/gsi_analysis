@@ -57,7 +57,8 @@ We suggest running the routines step by step, following the order of each script
 The database must be stored in a root folder to be read throughout the process.
 
  ## Authors and contact
- 
+
+* **[Elkin Alexander Tenorio Moreno](https://github.com/Elkin01)** - *Investigador Adjunto I.Humboldt* -  [Contact](etenorio@humboldt.org.co)
 * **[Cristian Alexander Cruz-Rodríguez](https://github.com/crcruzr)** - *Investigador Asistente I.Humboldt* -  [Contact](ccruz@humboldt.org.co)
 * **[Elkin Alexi Noguera Urbano](https://github.com/elkalexno)** - *Investigador Adjunto I.Humboldt* - [Contact](enoguera@humboldt.org.co)
 * **Iván gonzález**
@@ -67,6 +68,10 @@ The database must be stored in a root folder to be read throughout the process.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/crcruzr/Gap-selection-Index--GSI/blob/main/LICENSE) file for details.
+
+## Citation
+
+For citation please use the following DOI: https://doi.org/10.5281/zenodo.17228342
 
 ## Final considerations
 
