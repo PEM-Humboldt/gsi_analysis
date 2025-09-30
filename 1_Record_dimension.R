@@ -31,7 +31,7 @@ shape_zoneOwin <- as.owin(proj.col)
 
 # Cargar registros de especies desde un archivo txt
 Data <- vroom("Archivo_registros.txt", col_names = TRUE)
-Data2 <- Data[, c('gbifID', 'decimalLatitude', 'decimalLongitude_x')] #Select ad first column the name of the id record. And for second and third column, latitude and longitude, respectively.
+Data2 <- Data[, c('gbifID', 'decimalLatitude', 'decimalLongitude')] #Select ad first column the name of the id record. And for second and third column, latitude and longitude, respectively.
 Data2 <- Data2[!is.na(Data2$decimalLatitude),] # Eliminar registros con latitud NA
 Data2 <- Data2[!is.na(Data2$decimalLongitude),] # Eliminar registros con longitud NA
 
