@@ -72,6 +72,8 @@ Each script in the repository generates one component of the analysis as follows
 | `4_GSI.R` | Integrates the three previous layers into a single Geographic Survey Index (GSI) metric. |
 | `GAPfunctions.R` | Contains the auxiliary functions used throughout the analysis pipeline. This file is loaded at the beginning of each script. |
 
+![Workflow](Figures/GSI_workflow.png)
+
  ## Authors and contact
 
 * **[Elkin Alexander Tenorio Moreno](https://github.com/Elkin01)** - *Investigador Adjunto I.Humboldt* -  [Contact](etenorio@humboldt.org.co)
