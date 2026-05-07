@@ -58,6 +58,20 @@ We suggest running the routines step by step, following the order of each script
 
 The database must be stored in a root folder to be read throughout the process.
 
+## Repository structure
+
+In general, this analysis is based on the construction of three independent layers following [García Márquez et al., 2012](http://www.biodiversity-plants.de/biodivers_ecol/article_meta.php?DOI=10.7809/b-e.00057), with modifications for the environmental dimension proposed by [Aguiar et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.13137). These three dimensions are later integrated into a single final layer representing the Geographic Survey Index (GSI).
+
+Each script in the repository generates one component of the analysis as follows:
+
+| Script | Description |
+|---|---|
+| `1_Record_dimension.R` | Generates a layer representing the density of biological records as an indicator of sampling effort concentration across the study region. |
+| `2_Environmental_dimension.R` | Implements the methodology proposed by Aguiar et al. (2020) to identify regions with environmental conditions that have been poorly sampled compared to the rest of the environmental space. |
+| `3_Complementarity_dimension.R` | Builds the complementarity layer, which quantifies sampling completeness for each pixel based on the relationship between observed records and estimated species richness using two non-parametric estimators. |
+| `4_GSI.R` | Integrates the three previous layers into a single Geographic Survey Index (GSI) metric. |
+| `GAPfunctions.R` | Contains the auxiliary functions used throughout the analysis pipeline. This file is loaded at the beginning of each script. |
+
  ## Authors and contact
 
 * **[Elkin Alexander Tenorio Moreno](https://github.com/Elkin01)** - *Investigador Adjunto I.Humboldt* -  [Contact](etenorio@humboldt.org.co)
