@@ -1,3 +1,120 @@
+# =========================================================
+# 2_Ambiental_dimension.R
+# =========================================================
+#
+# DESCRIPTION:
+# This script calculates the "environmental dimension" of
+# the Geographic Survey Index (GSI), following the
+# conceptual modifications proposed by Aguiar et al. (2020)
+# to the original framework of García Márquez et al. (2012).
+#
+# The objective of this dimension is to identify portions
+# of the environmental space that are underrepresented by
+# biological sampling. Instead of evaluating only the
+# spatial density of records, this approach evaluates
+# whether certain combinations of environmental conditions
+# have been poorly sampled compared to others.
+#
+# The workflow uses environmental predictors and occurrence
+# localities to fit a binomial Generalized Linear Model
+# (GLM), contrasting sampled localities against randomly
+# generated points across the Area of Interest (AOI).
+# The resulting spatial prediction represents the relative
+# probability that environmental conditions have been
+# adequately sampled.
+#
+# INPUTS:
+# - A shapefile defining the Area of Interest (AOI)
+# - A table of biological records containing:
+#     * Record identifiers
+#     * Latitude and longitude coordinates
+#     * Species names
+#
+# - Environmental raster layers including:
+#     * Bioclimatic variables (WorldClim)
+#     * Elevation
+#     * Slope
+#
+# - Auxiliary functions stored in:
+#
+#     GAPfunctions.R
+#
+# OUTPUTS:
+# - A raster representing the environmental sampling
+#   dimension:
+#
+#     2_Ambiental/ambiental_dimension_GSI.tif
+#
+# - A normalized raster rescaled between 0 and 1:
+#
+#     2_Ambiental/ambiental_dimension_GSI_rescal_ajusvar.tif
+#
+# - An RData workspace containing all intermediate objects:
+#
+#     2_Ambiental/ambiental_R_object.RData
+#
+# MAIN PROCESSING STEPS:
+#
+# 1. Data loading and preprocessing
+#    - Load biological occurrence records
+#    - Remove missing coordinates
+#    - Remove duplicated records
+#    - Transform records into spatial objects
+#
+# 2. Spatial filtering and data cleaning
+#    - Retain records located within the AOI
+#    - Remove spatial duplicates using a distance threshold
+#    - Filter duplicated localities within species
+#
+# 3. Environmental variable preparation
+#    - Load bioclimatic variables
+#    - Load elevation data
+#    - Derive slope from elevation
+#    - Crop and mask all variables to the AOI
+#    - Remove highly biased or collinear predictors
+#
+# 4. Definition of the environmental sampling domain
+#    - Generate buffers around occurrence localities
+#    - Delimit the environmental calibration area
+#
+# 5. Random point generation
+#    - Generate pseudoabsence/random points across the AOI
+#    - Match the number of random points to the number of
+#      collection localities following García Márquez et
+#      al. (2012)
+#
+# 6. Environmental data extraction
+#    - Extract environmental conditions from:
+#         * Presence localities
+#         * Random points
+#
+# 7. GLM calibration and variable selection
+#    - Build an initial binomial GLM
+#    - Evaluate multicollinearity using VIF
+#    - Remove collinear predictors
+#    - Select informative variables using:
+#         * Variance Inflation Factor (VIF)
+#         * Stepwise AIC optimization
+#
+# 8. Model evaluation
+#    - Perform cross-validation
+#    - Evaluate prediction accuracy
+#    - Estimate optimal prediction cutoff
+#    - Compare sampled vs unsampled environmental regions
+#      using Wilcoxon tests
+#
+# 9. Spatial prediction
+#    - Project the GLM across the environmental layers
+#    - Generate a continuous raster representing the
+#      environmental sampling dimension
+#
+# 10. Raster normalization and export
+#     - Rescale raster values between 0 and 1
+#     - Export final raster layers
+#     - Save the R workspace for reproducibility
+#
+# =========================================================
+
 library(terra)
 library(fmsb)
 library(sf)
