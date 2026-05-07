@@ -1,3 +1,101 @@
+# =========================================================
+# 3_Complementarity_dimension.R
+# =========================================================
+#
+# DESCRIPTION:
+# This script calculates the "complementarity dimension"
+# of the Geographic Survey Index (GSI). This dimension
+# evaluates the completeness of biological sampling within
+# each spatial unit of the study area by comparing observed
+# species richness against estimated species richness.
+#
+# The approach assumes that well-sampled regions should
+# contain a number of observed species close to the
+# estimated total richness expected for that locality.
+# Conversely, regions where estimated richness greatly
+# exceeds observed richness are interpreted as
+# under-sampled areas.
+#
+# Species richness is estimated using non-parametric
+# richness estimators, specifically Bootstrap and
+# Jackknife methods, following the logic that inventory
+# completeness can be quantified as:
+#
+#     Observed richness / Estimated richness
+#
+# Values closer to 1 indicate more complete sampling,
+# whereas lower values indicate sampling gaps.
+#
+# INPUTS:
+# - A shapefile defining the Area of Interest (AOI)
+# - A table of biological occurrence records containing:
+#     * Record identifiers
+#     * Latitude and longitude coordinates
+#     * Species names
+#
+# - Auxiliary functions stored in:
+#
+#     GAPfunctions.R
+#
+# OUTPUTS:
+# - Raster layers representing sampling completeness
+#   estimated using:
+#
+#     * Bootstrap richness estimator
+#     * Jackknife richness estimator
+#
+# - Output raster files:
+#
+#     3_Complementarity/Complementariedad_Jacknife.tif
+#     3_Complementarity/Complementariedad_Bootstrap.tif
+#
+# - An RData workspace containing all intermediate objects:
+#
+#     3_Complementarity/complementariedad_R_object.RData
+#
+# MAIN PROCESSING STEPS:
+#
+# 1. Data loading and preprocessing
+#    - Load the study area shapefile
+#    - Load biological occurrence records
+#    - Remove records with missing coordinates
+#    - Remove duplicated localities
+#
+# 2. Spatial data preparation
+#    - Convert occurrence records into spatial objects
+#    - Rasterize the Area of Interest (AOI)
+#    - Assign each occurrence record to a raster cell
+#
+# 3. Species-by-cell organization
+#    - Build species lists for each raster cell
+#    - Calculate the number of records per spatial unit
+#    - Filter cells according to a minimum record threshold
+#
+# 4. Richness estimation
+#    - Estimate expected species richness using:
+#         * Bootstrap estimator
+#         * Jackknife estimator
+#
+# 5. Sampling completeness calculation
+#    - Calculate completeness as:
+#
+#         observed richness / estimated richness
+#
+#    - Generate completeness values for each raster cell
+#    - Constrain values greater than 1 to a maximum of 1
+#
+# 6. Raster generation and visualization
+#    - Convert completeness estimates into raster layers
+#    - Generate histograms and density distributions of
+#      completeness values
+#
+# 7. Export results
+#    - Save raster outputs for Bootstrap and Jackknife
+#      completeness layers
+#    - Save the R workspace for reproducibility
+#
+# =========================================================
+
 #rm(list = ls(all = TRUE))
 
 library(terra)
