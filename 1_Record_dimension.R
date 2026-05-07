@@ -1,3 +1,76 @@
+# =========================================================
+# 1_Record_dimension.R
+# =========================================================
+#
+# DESCRIPTION:
+# This script calculates the "record dimension" of the
+# Geographic Survey Index (GSI), following the framework
+# proposed by García Márquez et al. (2012). This dimension
+# represents the spatial concentration of biological records
+# and is used as a proxy for sampling effort across the
+# study region.
+#
+# The workflow uses georeferenced occurrence records to
+# estimate a kernel density surface, where areas with a
+# high concentration of records are interpreted as highly
+# sampled regions, while areas with low record density are
+# interpreted as poorly sampled regions.
+#
+# INPUTS:
+# - A shapefile defining the Area of Interest (AOI)
+# - A table of biological records containing:
+#     * Unique record identifiers
+#     * Latitude coordinates
+#     * Longitude coordinates
+#
+# OUTPUTS:
+# - A raster layer representing the normalized density of
+#   biological records across the study area:
+#
+#     1_Records/Vac_dens_rescal_1km.tif
+#
+# - An RData file containing the workspace generated during
+#   the analysis:
+#
+#     1_Records/Records_R_object.RData
+#
+# MAIN PROCESSING STEPS:
+#
+# 1. Data loading and preprocessing
+#    - Load the study area shapefile
+#    - Load biological occurrence records
+#    - Remove records with missing coordinates
+#    - Remove duplicated geographic coordinates
+#
+# 2. Coordinate system standardization
+#    - Transform all spatial data into a projected
+#      coordinate system suitable for spatial analysis
+#
+# 3. Spatial filtering
+#    - Retain only records located within the Area of
+#      Interest (AOI)
+#
+# 4. Point pattern construction
+#    - Convert occurrence coordinates into a spatial
+#      point pattern object compatible with spatstat
+#
+# 5. Kernel density estimation
+#    - Estimate sampling intensity using kernel density
+#      smoothing
+#    - Select the smoothing bandwidth using the Diggle
+#      method
+#
+# 6. Raster generation and normalization
+#    - Convert the kernel density output into a raster
+#    - Rescale raster values between 0 and 1
+#    - Reproject raster into WGS84 geographic coordinates
+#
+# 7. Export results
+#    - Save the final raster layer
+#    - Save the R workspace for reproducibility
+#
+# =========================================================
+
 
 library(sf)
 library(terra)
@@ -5,6 +78,7 @@ library(spatstat)
 library(geodata)
 library(dplyr)
 library(vroom)
+
 
 # ---------------------------
 #   Data loading
