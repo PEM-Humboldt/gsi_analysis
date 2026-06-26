@@ -3,6 +3,9 @@
 #By: Cristian Cruz-Rodr[i]guez / Iv[a]n gonz[a]lez & Elkin Noguera Urbano
 #Date: 14-09-2021
 
+#Edited by: Elkin A. Tenorio
+#Date: 26-06-2026
+
 ' Necessary functions to obtain the gap analysis
 #' 
 #' @param x Matriz con las variables y presencias / ausencias
@@ -12,7 +15,46 @@
 
 # GAP functions
 
-#Función para identificar las variables que poseen un VIF inferior al umbral seleccionado
+# =========================================================
+# Function: vif_func
+#
+# Used in:
+#   - 2_Ambiental_dimension.R
+#
+# Description:
+# This function identifies environmental predictor
+# variables with Variance Inflation Factor (VIF) values
+# below a selected threshold in order to reduce
+# multicollinearity among explanatory variables.
+#
+# The function iteratively removes variables with the
+# highest VIF values until all remaining predictors are
+# below the specified threshold.
+#
+# This procedure is used during GLM calibration for the
+# environmental dimension of the GSI.
+#
+# Inputs:
+# - in_frame:
+#     Data frame containing predictor variables
+#
+# - thresh:
+#     Maximum acceptable VIF threshold
+#
+# - regres:
+#     Regression type ('lm' or 'glm')
+#
+# Outputs:
+# - A vector containing the names of variables retained
+#   after VIF filtering
+#
+# Main steps:
+# 1. Calculate VIF values for all predictors
+# 2. Identify the variable with the highest VIF
+# 3. Remove highly collinear variables iteratively
+# 4. Stop when all variables are below the threshold
+# =========================================================
+
 vif_func<-function(in_frame=x, thresh=y, trace=T, regres = r,...){
   require(fmsb)
   require(car)
@@ -148,13 +190,73 @@ vif_func<-function(in_frame=x, thresh=y, trace=T, regres = r,...){
   }
 }
 
-#Función para calcular los valores de riqueza usa do el estimador de Boopstrap usando la matriz de datos con los registros de las especies
+# =========================================================
+# Function: compBoot
+#
+# Used in:
+#   - 3_Complementarity_dimension.R
+#
+# Description:
+# Estimates expected species richness using the
+# Bootstrap non-parametric richness estimator.
+#
+# This function compares observed richness against
+# expected richness to evaluate inventory completeness
+# within each spatial unit.
+#
+# Inputs:
+# - sppList:
+#     Vector containing species records for a sampling unit
+#
+# Outputs:
+# - Estimated species richness using the Bootstrap method
+#
+# Main steps:
+# 1. Calculate observed richness
+# 2. Estimate undetected species probability
+# 3. Compute Bootstrap richness estimate
+# =========================================================
+
 compBoot <- function(sppList){
   Sobs <- length(unique(sppList))
   Sexp <- Sobs + sum((1 - (table(sppList) / length(sppList))) ** length(sppList))
   return(Sexp) 
 }
-#Función para calcular los valores de riqueza usando el estimador de Jacknife usando la matriz de datos con los registros de las especies
+
+
+# =========================================================
+# Function: compJack
+#
+# Used in:
+#   - 3_Complementarity_dimension.R
+#
+# Description:
+# Estimates species richness using first- or second-order
+# Jackknife estimators.
+#
+# This estimator uses the frequency of rare species
+# (especially singletons) to infer the number of
+# undetected species in a sampling unit.
+#
+# Inputs:
+# - sppList:
+#     Vector of species records
+#
+# - nSamples:
+#     Number of samples or records
+#
+# - jackOrder:
+#     Jackknife order (1 or 2)
+#
+# Outputs:
+# - Estimated species richness using Jackknife estimation
+#
+# Main steps:
+# 1. Calculate observed richness
+# 2. Identify singleton species
+# 3. Apply Jackknife richness formula
+# =========================================================
+
 compJack <- function(sppList, nSamples, jackOrder = 1){
   Sobs <- length(unique(sppList))
   STable <- table(sppList)
@@ -170,6 +272,53 @@ compJack <- function(sppList, nSamples, jackOrder = 1){
   }
 }
 
+# NOTE:
+# This function provides a simple implementation of
+# first- and second-order Jackknife richness estimators.
+# The current GSI workflow uses SPECIES::jackknife()
+# within the richEst() function for richness estimation.
+
+#compJack <- function(sppList, jackOrder){
+#  Sobs <- length(unique(spL)) #j1.S
+#  sppFreq <- table(spL) #j1.1
+#  n <- table(table(data.j))
+  #   m <- data.frame(j = names(n), n_j = n[])
+  #   n <- apply(m, 2, as.integer)
+#  L <- length(sppFreq[sppFreq==1])
+#  j1.m=i1
+#  jack1=Sobs+L*((j1.m-1)/j1.m)
+
+#}
+
+# =========================================================
+# Function: list2Matrix
+#
+# Used in:
+#   - 3_Complementarity_dimension.R
+#
+# Description:
+# Converts a list object into a structured data frame or
+# matrix format.
+#
+# This function is mainly used to organize richness
+# estimation outputs into tabular form.
+#
+# Inputs:
+# - inList:
+#     Input list object
+#
+# - nRow / nCol:
+#     Desired matrix dimensions
+#
+# Outputs:
+# - Data frame representation of the input list
+#
+# Main steps:
+# 1. Unlist nested elements
+# 2. Reshape into matrix format
+# 3. Assign row and column names
+# =========================================================
+
 list2Matrix <- function(inList, nRow = NULL, nCol = NULL, colNames = NULL, rowNames = NULL){
   if(!is.null(nCol)) {
     outMatrix <- matrix(unlist(inList), ncol = nCol, byrow = TRUE)
@@ -181,6 +330,36 @@ list2Matrix <- function(inList, nRow = NULL, nCol = NULL, colNames = NULL, rowNa
   if(!is.null(rowNames)) {rownames(outMatrix) <- rowNames}
   outMatrix <- as.data.frame(outMatrix)
 }
+
+# =========================================================
+# Function: compRar
+#
+# Used in:
+#   - Currently not directly used in the main workflow
+#
+# Description:
+# Performs rarefaction simulations to estimate species
+# accumulation curves under standardized sampling effort.
+#
+# Inputs:
+# - sppList:
+#     Species records
+#
+# - simulations:
+#     Number of randomizations
+#
+# - nObs:
+#     Number of observations per simulation
+#
+# Outputs:
+# - Mean and variance of rarefied richness accumulation
+#
+# Main steps:
+# 1. Randomly subsample records
+# 2. Calculate accumulation curves
+# 3. Repeat simulations
+# 4. Estimate mean richness accumulation
+# =========================================================
 
 #simulations <- 100; nObs <- 50
 compRar <- function(sppList, simulations, nObs){
@@ -203,6 +382,35 @@ compRar <- function(sppList, simulations, nObs){
          )
 }
 
+
+# =========================================================
+# Function: fillCurve
+#
+# Used in:
+#   - compRar()
+#
+# Description:
+# Fills missing positions in species accumulation curves
+# generated during rarefaction simulations.
+#
+# Inputs:
+# - acum:
+#     Species accumulation values
+#
+# - index:
+#     Index positions of observed richness increments
+#
+# - lenData:
+#     Desired curve length
+#
+# Outputs:
+# - Completed accumulation curve
+#
+# Main steps:
+# 1. Identify missing intervals
+# 2. Fill gaps using previous accumulation values
+# =========================================================
+         
 #acum <-acumCurve; index <- index.j; lenData <- 25
 fillCurve <- function(acum, index, lenData){
   fill <- rep(NA, lenData)
@@ -218,20 +426,46 @@ fillCurve <- function(acum, index, lenData){
   return(fill)
 }
 
-compJack <- function(sppList, jackOrder){
-  Sobs <- length(unique(spL)) #j1.S
-  sppFreq <- table(spL) #j1.1
-  n <- table(table(data.j))
-  #   m <- data.frame(j = names(n), n_j = n[])
-  #   n <- apply(m, 2, as.integer)
-  L <- length(sppFreq[sppFreq==1])
-  j1.m=i1
-  jack1=Sobs+L*((j1.m-1)/j1.m)
-
-}
-
+# =========================================================
+# Function: richEst
+#
+# Used in:
+#   - 3_Complementarity_dimension.R
+#
+# Description:
+# Calculates multiple non-parametric species richness
+# estimators for each spatial unit.
+#
+# The function computes observed richness and several
+# richness estimators including:
+#
+#   - Bootstrap
+#   - Jackknife
+#   - Chao estimators
+#
+# This function forms the core of the complementarity
+# dimension of the GSI workflow.
+#
+# Inputs:
+# - sppList:
+#     Vector containing species identities
+#
+# - indexID:
+#     Vector defining spatial grouping units (cells)
+#
+# Outputs:
+# - Data frame containing richness estimates and
+#   associated statistics for each spatial unit
+#
+# Main steps:
+# 1. Group species records by raster cell
+# 2. Calculate observed richness
+# 3. Estimate richness using multiple estimators
+# 4. Organize outputs into tabular format
+# =========================================================
+         
 library(SPECIES)
-# Función paraidentificar la riqueza de especies de los registros en la matriz, usando las celdas asignadas
+# FunciÃ³n paraidentificar la riqueza de especies de los registros en la matriz, usando las celdas asignadas
 richEst <- function(sppList, indexID){
   sEstimation <- tapply(sppList, INDEX = indexID, 
                   FUN = function(x){
@@ -260,6 +494,35 @@ richEst <- function(sppList, indexID){
                        )
   }
 
+
+
+# =========================================================
+# Function: normalize01
+#
+# Used in:
+#   - Potential auxiliary normalization step for raster
+#     layers in the GSI workflow
+#
+# Description:
+# Rescales raster values between 0 and 1 using min-max
+# normalization.
+#
+# Inputs:
+# - x:
+#     Raster object
+#
+# - outDir:
+#     Optional output path for saving normalized raster
+#
+# Outputs:
+# - Normalized raster with values ranging from 0 to 1
+#
+# Main steps:
+# 1. Extract raster minimum and maximum values
+# 2. Apply min-max normalization
+# 3. Optionally export raster to disk
+# =========================================================
+                                   
 normalize01 <- function(x, outDir = NULL){
   xNorm <- (x - x@data@min)/(x@data@max - x@data@min)
   if (!is.null(outDir)){
