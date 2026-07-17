@@ -6,12 +6,6 @@
 #Edited by: Elkin A. Tenorio
 #Date: 26-06-2026
 
-' Necessary functions to obtain the gap analysis
-#' 
-#' @param x Matriz con las variables y presencias / ausencias
-#' @param y Umbral seleccionado para evaluar el VIF en las variables
-#' @return Listado con las variables identificadas \code{x} que poseen un VIF inferior al umbral seleccionado
-#' @examples
 
 # GAP functions
 
