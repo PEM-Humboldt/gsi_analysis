@@ -94,3 +94,12 @@ For citation please use the following DOI: https://doi.org/10.5281/zenodo.172283
 ## Final considerations
 
 This product contributes to the Annual Operational Plan to the [Instituto Humboldt](http://www.humboldt.org.co/es/) for the year 2021. Specifically to the activity associated with generating a repository with the codes used for the standardization of processes for raising baselines and monitoring biodiversity.
+
+## References
+
+Aguiar, L. M., Pereira, M. J. R., Zortéa, M., & Machado, R. B. (2020). Where are the bats? An environmental complementarity analysis in a megadiverse country. Diversity and Distributions, 26(11), 1510-1522.
+
+Márquez, J. R. G., Dormann, C. F., Sommer, J. H., Schmidt, M., Thiombiano, A., Da, S. S., ... & Barthlott, W. (2012). A methodological framework to quantify the spatial quality of biological databases. Biodiversity and Ecology, 4, 25-39.
+
+
+
